@@ -2,7 +2,7 @@ import './style.css'
 import {
   reservasDePrueba, aFechaISO, obtenerReservasDelDia, ordenarPorHora, diasConReservas, tamanoIndicador,
   cambiarMes, generarDiasDelMes, obtenerReservaPorId, formatearDetalle, cancelarReserva,
-  validarMotivoCancelacion, puedeCancelar, esEstadoFinal, generarSlots,
+  validarMotivoCancelacion, normalizarMotivo, puedeCancelar, esEstadoFinal, generarSlots,
 } from '../src/logica-negocio.js'
 
 const CLAVE = 'agendaya-reservas'
@@ -154,7 +154,7 @@ app.addEventListener('click', (e) => {
   } else if (accion === 'confirm-cancel') {
     const motivo = app.querySelector('[data-cy="cancel-reason-input"]').value
     if (!validarMotivoCancelacion(motivo).valido) return
-    estado.reservas = estado.reservas.map((r) => (r.id === estado.cancelandoId ? cancelarReserva(r, motivo) : r))
+    estado.reservas = estado.reservas.map((r) => (r.id === estado.cancelandoId ? cancelarReserva(r, normalizarMotivo(motivo)) : r))
     guardarReservas()
     estado.cancelandoId = null
     estado.mensaje = 'La reserva fue cancelada'
