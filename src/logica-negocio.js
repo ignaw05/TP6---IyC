@@ -35,9 +35,10 @@ export const ordenarPorHora = (reservas) => [...reservas].sort((a, b) => a.hora.
 
 export const filtrarPorEstado = (reservas, estado) => reservas.filter((r) => r.estado === estado)
 
-// Acepta Date o 'YYYY-MM-DD'.
+// Acepta Date, 'YYYY-MM-DD' o ISO con hora; compara el día en hora local.
+// 'YYYY-MM-DD' no pasa por new Date() porque lo interpretaría como UTC.
 export const esMismoDia = (a, b) => {
-  const iso = (x) => (typeof x === 'string' ? x.slice(0, 10) : aFechaISO(x))
+  const iso = (x) => (typeof x !== 'string' ? aFechaISO(x) : x.length === 10 ? x : aFechaISO(new Date(x)))
   return iso(a) === iso(b)
 }
 
