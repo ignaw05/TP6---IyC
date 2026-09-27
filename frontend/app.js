@@ -136,6 +136,8 @@ app.addEventListener('click', (e) => {
   const el = e.target.closest('[data-cy]')
   if (!el) return
   const card = el.closest('[data-cy="reservation-card"]')
+  // data-id siempre es string; se busca el id real para soportar ids numéricos o de texto.
+  const idTarjeta = card && estado.reservas.find((r) => String(r.id) === card.dataset.id)?.id
   const accion = el.dataset.cy
 
   if (accion === 'calendar-prev-month' || accion === 'calendar-next-month') {
@@ -143,9 +145,9 @@ app.addEventListener('click', (e) => {
   } else if (accion === 'calendar-day') {
     estado.diaSeleccionado = el.dataset.date
   } else if (accion === 'cancel-reservation') {
-    estado.cancelandoId = Number(card.dataset.id)
+    estado.cancelandoId = idTarjeta
   } else if (card) {
-    estado.detalleId = Number(card.dataset.id)
+    estado.detalleId = idTarjeta
   } else if (accion === 'detail-close') {
     estado.detalleId = null
   } else if (accion === 'abort-cancel') {
