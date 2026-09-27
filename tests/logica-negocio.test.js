@@ -1,9 +1,7 @@
-// Tests unitarios de src/logica-negocio.js (node:test, sin dependencias).
-// Cada integrante agrega los tests de sus funciones.
-import { test } from 'node:test'
-import assert from 'node:assert/strict'
+// Tests unitarios compartidos de src/logica-negocio.js (Jest).
+// Cada integrante agrega los tests de sus funciones en tests/<apellido>.test.js.
 import { reservasDePrueba } from '../src/logica-negocio.js'
 
 test('los datos de prueba tienen las 7 reservas', () => {
-  assert.equal(reservasDePrueba.length, 7)
+  expect(reservasDePrueba).toHaveLength(7)
 })
