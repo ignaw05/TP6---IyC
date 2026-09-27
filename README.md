@@ -1,6 +1,6 @@
 # TP6 - IyC · AgendaYA
 
-Módulo **Gestión de Agenda (Admin)**: frontend en HTML/CSS/JS vanilla servido con [Vite](https://vite.dev), tests unitarios con `node:test` y tests E2E con [Cypress](https://www.cypress.io).
+Módulo **Gestión de Agenda (Admin)**: frontend en HTML/CSS/JS vanilla servido con [Vite](https://vite.dev), tests unitarios con [Jest](https://jestjs.io) y tests E2E con [Cypress](https://www.cypress.io).
 
 ## Requisitos
 
@@ -13,7 +13,7 @@ Módulo **Gestión de Agenda (Admin)**: frontend en HTML/CSS/JS vanilla servido 
 npm install
 ```
 
-Instala Vite y Cypress (la primera vez Cypress descarga su binario, tarda unos minutos).
+Instala Vite, Jest y Cypress (la primera vez Cypress descarga su binario, tarda unos minutos).
 
 ## Levantar el frontend
 
@@ -31,7 +31,7 @@ Las reservas se guardan en `localStorage['agendaya-reservas']`. Para volver a lo
 npm test
 ```
 
-Corre `tests/*.test.js` contra `src/logica-negocio.js`. No necesita el frontend levantado.
+Corre con Jest todos los `tests/*.test.js` contra `src/logica-negocio.js` (cada integrante tiene su `tests/<apellido>.test.js`). No necesita el frontend levantado.
 
 ## Tests E2E (Cypress)
 
@@ -53,7 +53,7 @@ Los tests congelan la fecha con `cy.clock(...)` antes de `cy.visit('/')`, porque
 ```
 frontend/            index.html, app.js (UI) y style.css
 src/logica-negocio.js  funciones puras de la agenda (sin DOM)
-tests/               tests unitarios (node:test)
+tests/               tests unitarios (Jest)
 cypress/e2e/         flujo-principal.cy.js y flujo-error.cy.js
 cypress.config.js    baseUrl http://localhost:5173
 ```

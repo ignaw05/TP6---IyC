@@ -80,7 +80,12 @@ export const validarMotivoCancelacion = (motivo) =>
     ? { valido: false, error: `El motivo no puede superar los ${MAX_MOTIVO} caracteres` }
     : { valido: true, error: null }
 
-export const cancelarReserva = (r, motivo) => ({ ...r, estado: 'Cancelada', motivoCancelacion: normalizarMotivo(motivo) })
+export const cancelarReserva = (r, motivo) => {
+  if (!r) throw new Error('Reserva inválida')
+  if (r.estado === 'Cancelada') throw new Error('La reserva ya está cancelada')
+  if (r.estado === 'Completado') throw new Error('No se puede cancelar una reserva completada')
+  return { ...r, estado: 'Cancelada', motivoCancelacion: motivo ?? null }
+}
 
 // ponytail: una reserva ocupa el slot de su hora en punto (11:30 → slot 11:00).
 const slotDe = (hora) => `${hora.slice(0, 2)}:00`
@@ -91,7 +96,7 @@ export const generarSlots = (reservasDelDia) =>
     estado: reservasDelDia.some((r) => r.estado !== 'Cancelada' && slotDe(r.hora) === hora) ? 'Reservado' : 'Disponible',
   }))
 
-export const liberarSlot = (slots, r) => slots.map((s) => (s.hora === slotDe(r.hora) ? { ...s, estado: 'Disponible' } : s))
+export const liberarSlot = (slots, r) => slots.map((s) => (s.hora === r.hora ? { ...s, estado: 'Disponible' } : { ...s }))
 
 export const esReservaPasada = (r, ahora) => {
   const [a, m, d] = r.fecha.split('-').map(Number)

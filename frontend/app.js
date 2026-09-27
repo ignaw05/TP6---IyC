@@ -2,7 +2,7 @@ import './style.css'
 import {
   reservasDePrueba, aFechaISO, obtenerReservasDelDia, ordenarPorHora, diasConReservas, tamanoIndicador,
   cambiarMes, generarDiasDelMes, obtenerReservaPorId, formatearDetalle, cancelarReserva,
-  validarMotivoCancelacion, puedeCancelar, esEstadoFinal, generarSlots,
+  validarMotivoCancelacion, normalizarMotivo, puedeCancelar, esEstadoFinal, generarSlots,
 } from '../src/logica-negocio.js'
 
 const CLAVE = 'agendaya-reservas'
@@ -136,6 +136,8 @@ app.addEventListener('click', (e) => {
   const el = e.target.closest('[data-cy]')
   if (!el) return
   const card = el.closest('[data-cy="reservation-card"]')
+  // data-id siempre es string; se busca el id real para soportar ids numéricos o de texto.
+  const idTarjeta = card && estado.reservas.find((r) => String(r.id) === card.dataset.id)?.id
   const accion = el.dataset.cy
 
   if (accion === 'calendar-prev-month' || accion === 'calendar-next-month') {
@@ -143,9 +145,9 @@ app.addEventListener('click', (e) => {
   } else if (accion === 'calendar-day') {
     estado.diaSeleccionado = el.dataset.date
   } else if (accion === 'cancel-reservation') {
-    estado.cancelandoId = Number(card.dataset.id)
+    estado.cancelandoId = idTarjeta
   } else if (card) {
-    estado.detalleId = Number(card.dataset.id)
+    estado.detalleId = idTarjeta
   } else if (accion === 'detail-close') {
     estado.detalleId = null
   } else if (accion === 'abort-cancel') {
@@ -154,7 +156,7 @@ app.addEventListener('click', (e) => {
   } else if (accion === 'confirm-cancel') {
     const motivo = app.querySelector('[data-cy="cancel-reason-input"]').value
     if (!validarMotivoCancelacion(motivo).valido) return
-    estado.reservas = estado.reservas.map((r) => (r.id === estado.cancelandoId ? cancelarReserva(r, motivo) : r))
+    estado.reservas = estado.reservas.map((r) => (r.id === estado.cancelandoId ? cancelarReserva(r, normalizarMotivo(motivo)) : r))
     guardarReservas()
     estado.cancelandoId = null
     estado.mensaje = 'La reserva fue cancelada'
