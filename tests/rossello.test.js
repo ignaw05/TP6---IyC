@@ -1,6 +1,4 @@
-// Tests unitarios de M05-US09 Escenario 2 (día sin reservas): filtrarPorEstado y esMismoDia.
-import { describe, it } from 'node:test'
-import assert from 'node:assert/strict'
+// Tests unitarios de M05-US09 Escenario 2 (día sin reservas): filtrarPorEstado y esMismoDia (Jest, ESM).
 import { filtrarPorEstado, esMismoDia } from '../src/logica-negocio.js'
 
 const reserva = (id, estado) => ({
@@ -17,7 +15,7 @@ describe('filtrarPorEstado', () => {
     const resultado = filtrarPorEstado(reservas, 'Confirmada')
 
     // Assert
-    assert.deepEqual(resultado.map((r) => r.id), [1, 3])
+    expect(resultado.map((r) => r.id)).toEqual([1, 3])
   })
 
   it('devuelve un array vacío si no hay reservas o ninguna tiene ese estado', () => {
@@ -29,8 +27,8 @@ describe('filtrarPorEstado', () => {
     const sinCoincidencias = filtrarPorEstado(reservas, 'Completado')
 
     // Assert
-    assert.deepEqual(deVacio, [])
-    assert.deepEqual(sinCoincidencias, [])
+    expect(deVacio).toEqual([])
+    expect(sinCoincidencias).toEqual([])
   })
 
   it('distingue mayúsculas: "confirmada" no coincide con "Confirmada"', () => {
@@ -41,7 +39,7 @@ describe('filtrarPorEstado', () => {
     const resultado = filtrarPorEstado(reservas, 'confirmada')
 
     // Assert
-    assert.deepEqual(resultado, [])
+    expect(resultado).toEqual([])
   })
 
   it('no muta el array original y devuelve uno nuevo', () => {
@@ -53,8 +51,8 @@ describe('filtrarPorEstado', () => {
     const resultado = filtrarPorEstado(reservas, 'Confirmada')
 
     // Assert
-    assert.deepEqual(reservas, copia)
-    assert.notEqual(resultado, reservas)
+    expect(reservas).toEqual(copia)
+    expect(resultado).not.toBe(reservas)
   })
 
   it('lanza TypeError si recibe null en lugar de un array', () => {
@@ -62,7 +60,7 @@ describe('filtrarPorEstado', () => {
     const reservas = null
 
     // Act + Assert
-    assert.throws(() => filtrarPorEstado(reservas, 'Confirmada'), TypeError)
+    expect(() => filtrarPorEstado(reservas, 'Confirmada')).toThrow(TypeError)
   })
 })
 
@@ -76,8 +74,8 @@ describe('esMismoDia', () => {
     const distinto = esMismoDia(dia, '2026-10-16')
 
     // Assert
-    assert.equal(mismo, true)
-    assert.equal(distinto, false)
+    expect(mismo).toBe(true)
+    expect(distinto).toBe(false)
   })
 
   it('compara un Date con un string del mismo día, sin importar la hora (00:00 y 23:59)', () => {
@@ -91,9 +89,9 @@ describe('esMismoDia', () => {
     const inicioVsFin = esMismoDia(inicio, fin)
 
     // Assert
-    assert.equal(inicioVsString, true)
-    assert.equal(finVsString, true)
-    assert.equal(inicioVsFin, true)
+    expect(inicioVsString).toBe(true)
+    expect(finVsString).toBe(true)
+    expect(inicioVsFin).toBe(true)
   })
 
   it('distingue el último minuto de un día del primero del día siguiente', () => {
@@ -105,7 +103,7 @@ describe('esMismoDia', () => {
     const resultado = esMismoDia(ultimoMinuto, primerMinuto)
 
     // Assert
-    assert.equal(resultado, false)
+    expect(resultado).toBe(false)
   })
 
   it('devuelve false si un string no es una fecha válida', () => {
@@ -116,7 +114,7 @@ describe('esMismoDia', () => {
     const resultado = esMismoDia(invalida, '2026-10-15')
 
     // Assert
-    assert.equal(resultado, false)
+    expect(resultado).toBe(false)
   })
 
   it('lanza TypeError si recibe null', () => {
@@ -124,6 +122,6 @@ describe('esMismoDia', () => {
     const fecha = null
 
     // Act + Assert
-    assert.throws(() => esMismoDia(fecha, '2026-10-15'), TypeError)
+    expect(() => esMismoDia(fecha, '2026-10-15')).toThrow(TypeError)
   })
 })
