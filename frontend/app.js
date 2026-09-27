@@ -3,7 +3,7 @@ import {
   reservasDePrueba, aFechaISO, obtenerReservasDelDia, ordenarPorHora, diasConReservas, tamanoIndicador,
   cambiarMes, generarDiasDelMes, obtenerReservaPorId, formatearDetalle, cancelarReserva,
   validarMotivoCancelacion, puedeCancelar, esEstadoFinal, generarSlots,
-} from './logica-agenda.js'
+} from '../src/logica-negocio.js'
 
 const CLAVE = 'agendaya-reservas'
 const MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
