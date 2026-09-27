@@ -65,7 +65,7 @@ function renderLista(delDia, ahora) {
         <strong data-cy="reservation-name">${r.cliente}</strong>
         <span data-cy="reservation-phone">${formatearDetalle(r).telefono}</span>
         <span data-cy="reservation-time">${r.hora}</span>
-        <span data-cy="reservation-status" class="estado">${r.estado}</span>
+        <span data-cy="reservation-status" class="estado estado-${r.estado.toLowerCase()}">${r.estado}</span>
         ${boton}
       </li>`
   })
