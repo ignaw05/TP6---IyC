@@ -53,16 +53,6 @@ export const diasConReservas = (reservas, mes, anio) => {
 
 export const tamanoIndicador = (cantidad) => (cantidad <= 1 ? 'sm' : cantidad <= 3 ? 'md' : 'lg')
 
-export const cambiarMes = (mes, anio, delta) => {
-  const total = anio * 12 + (mes - 1) + delta
-  return { mes: (total % 12) + 1, anio: Math.floor(total / 12) }
-}
-
-export const generarDiasDelMes = (mes, anio) => {
-  const cantidad = new Date(anio, mes, 0).getDate()
-  return Array.from({ length: cantidad }, (_, i) => `${anio}-${pad(mes)}-${pad(i + 1)}`)
-}
-
 export const obtenerReservaPorId = (reservas, id) => reservas.find((r) => r.id === id) ?? null
 
 export const formatearDetalle = (r) => ({
@@ -112,3 +102,28 @@ export const accionesDisponibles = (r, ahora) => (puedeCancelar(r, ahora) ? ['ve
 export const transicionEstadoValida = (desde, hacia) => TRANSICIONES[desde]?.includes(hacia) ?? false
 
 export const esEstadoFinal = (estado) => ESTADOS_FINALES.includes(estado)
+
+const validarAnio = (anio) => {
+  if (!Number.isInteger(anio)) throw new Error('Año inválido')
+}
+
+const validarMes = (mes) => {
+  if (!Number.isInteger(mes) || mes < 1 || mes > 12) throw new Error('Mes inválido')
+}
+
+export const cambiarMes = (mes, anio, delta) => {
+  validarMes(mes)
+  validarAnio(anio)
+  if (!Number.isInteger(delta)) throw new Error('Delta inválido')
+
+  const total = anio * 12 + (mes - 1) + delta
+  return { mes: (((total % 12) + 12) % 12) + 1, anio: Math.floor(total / 12) }
+}
+
+export const generarDiasDelMes = (mes, anio) => {
+  validarMes(mes)
+  validarAnio(anio)
+
+  const cantidad = new Date(anio, mes, 0).getDate()
+  return Array.from({ length: cantidad }, (_, i) => `${anio}-${pad(mes)}-${pad(i + 1)}`)
+}
