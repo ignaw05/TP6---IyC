@@ -145,6 +145,8 @@ app.addEventListener('click', (e) => {
   } else if (accion === 'calendar-day') {
     estado.diaSeleccionado = el.dataset.date
   } else if (accion === 'cancel-reservation') {
+    const reservaSeleccionada = estado.reservas.find((r) => r.id === idTarjeta)
+    if (!reservaSeleccionada || !puedeCancelar(reservaSeleccionada, new Date())) return
     estado.cancelandoId = idTarjeta
   } else if (card) {
     estado.detalleId = idTarjeta
