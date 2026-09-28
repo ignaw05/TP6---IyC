@@ -92,12 +92,12 @@ function renderDetalle() {
   return `
     <div class="fondo">
       <div data-cy="reservation-detail" class="modal" role="dialog" aria-label="Detalle de reserva">
-        <p><b>Cliente:</b> ${d.cliente}</p>
-        <p><b>Teléfono:</b> ${d.telefono}</p>
-        <p><b>Fecha:</b> ${d.fecha}</p>
-        <p><b>Hora:</b> ${d.hora}</p>
-        <p><b>Tipo de evento:</b> ${d.tipoEvento}</p>
-        <p><b>Estado:</b> ${d.estado}</p>
+        <p><b>Cliente:</b> <span data-cy="detail-client">${d.cliente}</span></p>
+        <p><b>Teléfono:</b> <span data-cy="detail-phone">${d.telefono}</span></p>
+        <p><b>Fecha:</b> <span data-cy="detail-date">${d.fecha}</span></p>
+        <p><b>Hora:</b> <span data-cy="detail-time">${d.hora}</span></p>
+        <p><b>Tipo de evento:</b> <span data-cy="detail-event-type">${d.tipoEvento}</span></p>
+        <p><b>Estado:</b> <span data-cy="detail-status">${d.estado}</span></p>
         <button data-cy="detail-close">Cerrar</button>
       </div>
     </div>`
