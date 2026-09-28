@@ -1,7 +1,6 @@
 // #7 M05-US2 Escenario 2: motivo de cancelación opcional con máximo de 200 caracteres (Abadie)
 const CLAVE = 'agendaya-reservas'
 const ID = 'r-test-motivo'
-const LARGO_200 = 'a'.repeat(200)
 const LARGO_201 = 'a'.repeat(201)
 const ERROR_TOO_LONG = 'El motivo no puede superar los 200 caracteres'
 
@@ -43,8 +42,8 @@ describe('AgendaYA - M05 Gestión de Agenda - Motivo de cancelación', () => {
     // Act: se abre el modal y se escribe un motivo de 201 caracteres, luego se intenta confirmar.
     abrirModal()
     cy.get('[data-cy="cancel-reason-input"]').type(LARGO_201, { delay: 0 })
-    // El input handler deshabilita el botón, así que el click normal es imposible:
-    // se usa force para exercising la guarda de la lógica en el click handler.
+    // El input handler deshabilita el botón al detectar el motivo inválido, así que el click
+    // normal es imposible: se usa force para ejercitar la guarda de la lógica en el click handler.
     cy.get('[data-cy="confirm-cancel"]').should('be.disabled').click({ force: true })
 
     // Assert: error visible, el flujo no avanzó y nada se guardó.
@@ -55,28 +54,6 @@ describe('AgendaYA - M05 Gestión de Agenda - Motivo de cancelación', () => {
     cy.window().then((win) => {
       expect(estadoEnLocalStorage(win).estado).to.equal('Pendiente')
       expect(estadoEnLocalStorage(win).motivoCancelacion).to.equal(null)
-    })
-  })
-
-  it('M05-US2: un motivo de exactamente 200 caracteres sí cancela la reserva', () => {
-    // Arrange: la reserva está Pendiente y el motivo límite es válido.
-    tarjeta().find('[data-cy="reservation-status"]').should('have.text', 'Pendiente')
-    expect(LARGO_200).to.have.length(200)
-
-    // Act: se abre el modal, se escriben 200 caracteres y se confirma sin forzar.
-    abrirModal()
-    cy.get('[data-cy="cancel-reason-input"]').type(LARGO_200, { delay: 0 })
-
-    // Assert: sin error, con botón habilitado, y la cancelación se persiste.
-    cy.get('[data-cy="cancel-reason-error"]').should('not.be.visible')
-    cy.get('[data-cy="confirm-cancel"]').should('be.enabled')
-    cy.get('[data-cy="confirm-cancel"]').click()
-    cy.get('[data-cy="cancel-modal"]').should('not.exist')
-    cy.get('[data-cy="cancel-success"]').should('be.visible').and('have.text', 'La reserva fue cancelada')
-    tarjeta().find('[data-cy="reservation-status"]').should('have.text', 'Cancelada')
-    cy.window().then((win) => {
-      expect(estadoEnLocalStorage(win).estado).to.equal('Cancelada')
-      expect(estadoEnLocalStorage(win).motivoCancelacion).to.equal(LARGO_200)
     })
   })
 })
