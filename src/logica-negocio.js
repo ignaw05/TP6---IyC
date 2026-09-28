@@ -63,16 +63,20 @@ export const generarDiasDelMes = (mes, anio) => {
   return Array.from({ length: cantidad }, (_, i) => `${anio}-${pad(mes)}-${pad(i + 1)}`)
 }
 
-export const obtenerReservaPorId = (reservas, id) => reservas.find((r) => r.id === id) ?? null
+export const obtenerReservaPorId = (reservas, id) =>
+  (Array.isArray(reservas) ? reservas : []).find((r) => String(r?.id) === String(id)) ?? null
 
-export const formatearDetalle = (r) => ({
-  cliente: r.cliente,
-  telefono: r.telefono || 'Sin teléfono',
-  fecha: r.fecha,
-  hora: r.hora,
-  tipoEvento: r.tipoEvento,
-  estado: r.estado,
-})
+export const formatearDetalle = (r) => {
+  if (!r) throw new Error('Reserva inválida')
+  return {
+    cliente: r.cliente,
+    telefono: String(r.telefono ?? '').trim() || 'Sin teléfono',
+    fecha: r.fecha,
+    hora: r.hora,
+    tipoEvento: r.tipoEvento,
+    estado: r.estado,
+  }
+}
 
 export const normalizarMotivo = (motivo) => String(motivo ?? '').trim().replace(/ +/g, ' ') || null
 
