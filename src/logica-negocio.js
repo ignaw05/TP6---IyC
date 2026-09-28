@@ -99,13 +99,17 @@ export const generarSlots = (reservasDelDia) =>
 
 export const liberarSlot = (slots, r) => slots.map((s) => (s.hora === r.hora ? { ...s, estado: 'Disponible' } : { ...s }))
 
-export const esReservaPasada = (r, ahora) => {
+export const esReservaPasada = (r, ahora = new Date()) => {
+  if (!r) throw new Error('Reserva inválida')
   const [a, m, d] = r.fecha.split('-').map(Number)
   const [h, min] = r.hora.split(':').map(Number)
   return new Date(a, m - 1, d, h, min) < ahora
 }
 
-export const puedeCancelar = (r, ahora) => !esReservaPasada(r, ahora) && !ESTADOS_FINALES.includes(r.estado)
+export const puedeCancelar = (r, ahora = new Date()) => {
+  if (!r) throw new Error('Reserva inválida')
+  return !esReservaPasada(r, ahora) && !ESTADOS_FINALES.includes(r.estado)
+}
 
 export const accionesDisponibles = (r, ahora) => (puedeCancelar(r, ahora) ? ['ver-detalle', 'cancelar'] : ['ver-detalle'])
 
