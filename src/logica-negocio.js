@@ -74,10 +74,10 @@ export const formatearDetalle = (r) => ({
   estado: r.estado,
 })
 
-export const normalizarMotivo = (motivo) => (motivo ?? '').trim() || null
+export const normalizarMotivo = (motivo) => String(motivo ?? '').trim().replace(/ +/g, ' ') || null
 
 export const validarMotivoCancelacion = (motivo) =>
-  (motivo ?? '').trim().length > MAX_MOTIVO
+  String(motivo ?? '').trim().length > MAX_MOTIVO
     ? { valido: false, error: `El motivo no puede superar los ${MAX_MOTIVO} caracteres` }
     : { valido: true, error: null }
 
