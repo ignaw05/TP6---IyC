@@ -71,8 +71,7 @@ function renderLista(delDia, ahora) {
   })
   return `
     <section>
-      <h3>Reservas del ${estado.diaSeleccionado}</h3>
-      ${tarjetas.length
+      <h3 data-cy="selected-day-title">Reservas del ${estado.diaSeleccionado}</h3>      ${tarjetas.length
         ? `<ul data-cy="day-reservations-list">${tarjetas.join('')}</ul>`
         : '<p data-cy="empty-day-message">No hay reservas programadas para este día</p>'}
     </section>`
