@@ -30,6 +30,7 @@ describe('AgendaYA - M05 Gestión de Agenda', () => {
     // Arrange
     tarjeta().should('be.visible')
     tarjeta().find('[data-cy="reservation-name"]').should('have.text', 'Carla Díaz')
+    cy.screenshot('01-tarjeta-visible')
 
     // Act
     cy.get('[data-cy="calendar-day"][data-date="2026-10-15"]').click()
@@ -43,5 +44,6 @@ describe('AgendaYA - M05 Gestión de Agenda', () => {
     detalle().find('[data-cy="detail-time"]').should('have.text', '14:00')
     detalle().find('[data-cy="detail-event-type"]').should('have.text', 'Consulta general')
     detalle().find('[data-cy="detail-status"]').should('have.text', 'Pendiente')
+    cy.screenshot('02-detalle-abierto')
   })
 })
