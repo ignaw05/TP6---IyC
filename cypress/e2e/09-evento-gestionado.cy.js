@@ -46,11 +46,13 @@ describe('AgendaYA - M05 Gestión de Agenda', () => {
     cy.get('[data-cy="calendar-day"][data-date="2026-10-15"]').click()
     tarjetaConfirmada().find('[data-cy="reservation-status"]').should('have.text', 'Confirmada')
     tarjetaCancelada().find('[data-cy="reservation-status"]').should('have.text', 'Cancelada')
+    cy.wait(1500) // pausa para visualizar el estado previo en el video
 
     // Act
     tarjetaConfirmada().find('[data-cy="cancel-reservation"]').then(([boton]) => {
       boton.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
     })
+    cy.wait(1500) // pausa para visualizar que no se abre ningún modal
 
     // Assert
     tarjetaCancelada().find('[data-cy="cancel-reservation"]').should('not.exist')
@@ -58,6 +60,7 @@ describe('AgendaYA - M05 Gestión de Agenda', () => {
     cy.get('[data-cy="cancel-modal"]').should('not.exist')
     cy.get('[data-cy="slot-status"][data-hora="09:00"]').should('have.text', 'Reservado')
     cy.get('[data-cy="slot-status"][data-hora="11:00"]').should('have.text', 'Disponible')
+    cy.wait(1500) // pausa final para visualizar el estado posterior en el video
     cy.window().then((win) => {
       const guardadas = JSON.parse(win.localStorage.getItem(CLAVE))
       expect(guardadas.find((r) => r.id === ID_CONFIRMADA).estado).to.equal('Confirmada')
